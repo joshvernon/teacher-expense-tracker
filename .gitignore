@@ -166,3 +166,6 @@ ENV/
 expenses.db
 test.db
 sql/
+# VSCode stuff
+settings.json
+tags
