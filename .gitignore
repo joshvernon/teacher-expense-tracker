@@ -164,4 +164,5 @@ ENV/
 
 ### Project-specific ignores ###
 expenses.db
+test.db
 sql/
