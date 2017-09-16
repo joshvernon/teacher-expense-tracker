@@ -1,13 +1,14 @@
 # data_access.py
 
-def sum(table_name='expenses'):
+def sum_expenses(table_name='expenses'):
     # Sum stuff.
+    print('Dummy sum')
 
 def insert():
-    # Insert stuff.
+    print('Dummy insert')
 
 def create():
-    # Create stuff.
+    print('Dummy create')
 
 def scrub_table_name(table_name):
     # Provides sanitization of input table names in SQL queries,
