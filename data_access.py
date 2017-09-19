@@ -1,16 +1,44 @@
 # data_access.py
 
-def sum_expenses(table_name='expenses'):
-    # Sum stuff.
-    print('Dummy sum')
+import sqlite3
 
-def insert():
-    print('Dummy insert')
+DATABASE = 'expenses.db'
+TABLE_NAME = 'expenses'
 
-def create():
-    print('Dummy create')
+class DataAccess():
 
-def scrub_table_name(table_name):
+    def __init__(self, database=DATABASE, table_name=TABLE_NAME):
+        self.database = database
+        self.table_name = table_name
+        self.connection = _get_connection(database)
+
+    def __repr__(self):
+        return ("DataAccess(database:'{0}', table_name:'{1}')"
+                .format(self.database, self.table_name))
+
+    def close(self):
+        self.connection.close()
+
+    def create(self):
+        cur = self.connection.cursor()
+        create_stmt = "CREATE TABLE IF NOT EXISTS {0}(\
+            description TEXT,\
+            amount REAL,\
+            file_path TEXT,\
+            date TEXT)".format(_scrub_table_name(self.table_name))
+        cur.execute(create_stmt)
+        self.connection.commit()
+
+    def insert(self):
+        print('Dummy insert.')
+    
+    def sum_expenses(self):
+        print('Dummy sum_expenses.')
+
+def _get_connection(database):
+    return sqlite3.connect(database)
+
+def _scrub_table_name(table_name):
     # Provides sanitization of input table names in SQL queries,
     # since SQLite doesn't allow query parameterization of table names.
     # Shamelessly stolen from here:
