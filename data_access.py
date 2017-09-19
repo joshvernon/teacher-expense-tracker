@@ -20,14 +20,13 @@ class DataAccess():
         self.connection.close()
 
     def create(self):
-        cur = self.connection.cursor()
         create_stmt = "CREATE TABLE IF NOT EXISTS {0}(\
             description TEXT,\
             amount REAL,\
             file_path TEXT,\
             date TEXT)".format(_scrub_table_name(self.table_name))
-        cur.execute(create_stmt)
-        self.connection.commit()
+        with self.connection as conn:
+            conn.execute(create_stmt)
 
     def insert(self):
         print('Dummy insert.')
