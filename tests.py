@@ -92,5 +92,32 @@ class DataAccessTestCase(unittest.TestCase):
         da = DataAccess(database=TEST_DB)
         self.assertRaises(InvalidDataError, da.insert)
 
+    def test_sum_expenses_one_row(self):
+        da = DataAccess(database=TEST_DB)
+        da.insert(**TEST_ROW_1)
+        sum_result = da.sum_expenses()
+        da.close()
+        self.assertEqual(sum_result, 12.75)
+
+    def test_sum_expeneses_two_rows(self):
+        da = DataAccess(database=TEST_DB)
+        da.insert(**TEST_ROW_1)
+        da.insert(**TEST_ROW_2)
+        sum_result = da.sum_expenses()
+        da.close()
+        self.assertAlmostEqual(sum_result, 26.99)
+
+    def test_sum_expenses_no_rows_is_None(self):
+        da = DataAccess(database=TEST_DB)
+        da.create()
+        sum_result = da.sum_expenses()
+        da.close()
+        self.assertIsNone(sum_result)
+
+    def test_sum_expenses_missing_table_raises_OperationalError(self):
+        da = DataAccess(database=TEST_DB)
+        self.assertRaises(sqlite3.OperationalError, da.sum_expenses)
+        da.close()
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
