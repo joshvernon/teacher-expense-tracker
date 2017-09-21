@@ -164,4 +164,7 @@ ENV/
 
 ### Project-specific ignores ###
 expenses.db
+test.db
 sql/
+# VSCode stuff
+.vscode/
