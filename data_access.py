@@ -23,7 +23,7 @@ class DataAccess():
 
     def __init__(self, database=DATABASE, table_name=TABLE_NAME):
         self.database = database
-        self.table_name = table_name
+        self.table_name = _scrub_table_name(table_name)
         self.connection = _get_connection(database)
 
     def __repr__(self):
@@ -45,7 +45,7 @@ class DataAccess():
             description TEXT,\
             amount REAL,\
             file_path TEXT,\
-            date TEXT)".format(_scrub_table_name(self.table_name))
+            date TEXT)".format(self.table_name)
         with self.connection as conn:
             conn.execute(create_stmt)
 
@@ -58,14 +58,12 @@ class DataAccess():
             :description,\
             :amount,\
             :file_path,\
-            datetime(:date))".format(_scrub_table_name(self.table_name))
+            datetime(:date))".format(self.table_name)
         with self.connection as conn:
             conn.execute(insert_stmt, kwargs)
     
     def sum_expenses(self):
-        select_stmt = "SELECT SUM(amount) FROM {0}".format(
-            _scrub_table_name(self.table_name)
-        )
+        select_stmt = "SELECT SUM(amount) FROM {0}".format(self.table_name)
         cursor = self.connection.execute(select_stmt)
         sum_result = cursor.fetchone()[0]
         cursor.close()
