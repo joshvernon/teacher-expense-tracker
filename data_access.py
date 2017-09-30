@@ -63,11 +63,13 @@ class DataAccess():
             conn.execute(insert_stmt, kwargs)
     
     def sum_expenses(self):
+        if not self._table_exists(self.table_name):
+            return 0
         select_stmt = "SELECT SUM(amount) FROM {0}".format(self.table_name)
         cursor = self.connection.execute(select_stmt)
         sum_result = cursor.fetchone()[0]
         cursor.close()
-        return sum_result
+        return 0 if sum_result is None else sum_result
 
 class InvalidDataError(Exception):
     pass
