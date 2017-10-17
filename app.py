@@ -21,8 +21,9 @@ class Application(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.add_new_expense = tk.Button(self)
-        self.add_new_expense['text'] = 'Add new expense'
+        self.add_new_expense = tk.Button(
+            self, text='Add new expense', command=self.create_add_window
+        )
         self.add_new_expense.pack(side='top')
 
         self.expenses_label = tk.Label(self)
@@ -33,6 +34,14 @@ class Application(tk.Frame):
 
         self.quit = tk.Button(self, text="Quit", command=root.destroy)
         self.quit.pack(side="bottom")
+
+    def create_add_window(self):
+        self.add_window = tk.Toplevel(root)
+        self.add_window.title('Add New Expense')
+        self.amount_label = tk.Label(self.add_window, text='Expense Amount: $')
+        self.amount_label.grid(column=1, row=1)
+        self.amount_entry = tk.Entry(self.add_window)
+        self.amount_entry.grid(column=2, row=1)
 
 root = tk.Tk()
 app = Application(master=root)
