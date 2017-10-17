@@ -1,4 +1,3 @@
-import sys
 import tkinter as tk
 
 from data_access import DataAccess
