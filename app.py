@@ -1,6 +1,5 @@
 import sys
 import tkinter as tk
-from tkinter import ttk
 
 from data_access import DataAccess
 
@@ -8,7 +7,6 @@ def _get_sum():
     sum_data_access = DataAccess()
     sum_result = sum_data_access.sum_expenses()
     sum_data_access.close()
-    print(sum_result)
     return sum_result
 
 def _format_sum_string(sum_value):
