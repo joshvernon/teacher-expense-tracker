@@ -58,11 +58,15 @@ class Application(tk.Frame):
 
         receipt_label = tk.Label(add_window, text='Receipt: ')
         receipt_label.grid(column=1, row=4)
-        receipt_button = tk.Button(add_window, text='Choose file', command=self.launch_file_dialog)
+        receipt_button = tk.Button(
+            add_window,
+            text='Choose file',
+            command=self.launch_file_dialog,
+        )
         receipt_button.grid(column=2, row=4)
 
         add_button = tk.Button(add_window, text='Add', pady=10, padx=25)
-        add_button.grid(row=5, columnspan=5)
+        add_button.grid(row=5, columnspan=5, pady=5)
 
     def launch_file_dialog(self):
         file_path = filedialog.askopenfilename(
