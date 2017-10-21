@@ -14,7 +14,7 @@ def _format_sum_string(sum_value):
     return 'Total expenses: ${0:0.2f}'.format(sum_value)
 
 class Application(tk.Frame):
-    
+
     def __init__(self, master=None):
         super().__init__(master, padx=75, pady=50)
         self.sum = _get_sum()
@@ -34,7 +34,7 @@ class Application(tk.Frame):
         self.label_text = tk.StringVar()
         self.label_text.set(_format_sum_string(self.sum))
         self.expenses_label['textvariable'] = self.label_text
-        self.expenses_label.pack
+        self.expenses_label.pack()
 
     def create_add_window(self):
         self.add_window = tk.Toplevel(root, padx=35, pady=40)
