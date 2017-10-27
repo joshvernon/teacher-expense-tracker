@@ -18,6 +18,10 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master, padx=75, pady=50)
         self.sum = _get_sum()
+        self.add_window = None
+        self.description = ''
+        self.amount = 0.0
+        self.date = '1900-01-01 00:00:00'
         self.receipt = 'dummy_path'
         self.pack()
         self.create_widgets()
@@ -31,41 +35,52 @@ class Application(tk.Frame):
         )
         add_new_expense.pack(side='top')
 
-        expenses_label = tk.Label(self)
-        self.label_text = tk.StringVar()
-        self.label_text.set(_format_sum_string(self.sum))
-        expenses_label['textvariable'] = self.label_text
+        self.sum_label = tk.StringVar()
+        self.sum_label.set(_format_sum_string(self.sum))
+        expenses_label = tk.Label(self, textvariable=self.sum_label)
         expenses_label.pack()
 
     def create_add_window(self):
-        add_window = tk.Toplevel(root, padx=35, pady=40)
-        add_window.title('Add New Expense')
+        self.add_window = tk.Toplevel(root, padx=35, pady=40)
+        self.add_window.title('Add New Expense')
 
-        description_label = tk.Label(add_window, text='Description: ')
+        self.description = tk.StringVar()
+        description_label = tk.Label(self.add_window, text='Description: ')
         description_label.grid(column=1, row=1)
-        description_entry = tk.Entry(add_window)
+        description_entry = tk.Entry(
+            self.add_window,
+            textvariable=self.description
+        )
         description_entry.grid(column=2, row=1)
 
-        amount_label = tk.Label(add_window, text='Amount: $')
+        self.amount = tk.StringVar()
+        amount_label = tk.Label(self.add_window, text='Amount: $')
         amount_label.grid(column=1, row=2)
-        amount_entry = tk.Entry(add_window)
+        amount_entry = tk.Entry(self.add_window, textvariable=self.amount)
         amount_entry.grid(column=2, row=2)
 
-        date_label = tk.Label(add_window, text='Date: ')
+        self.date = tk.StringVar()
+        date_label = tk.Label(self.add_window, text='Date: ')
         date_label.grid(column=1, row=3)
-        date_entry = tk.Entry(add_window)
+        date_entry = tk.Entry(self.add_window, textvariable=self.date)
         date_entry.grid(column=2, row=3)
 
-        receipt_label = tk.Label(add_window, text='Receipt: ')
+        receipt_label = tk.Label(self.add_window, text='Receipt: ')
         receipt_label.grid(column=1, row=4)
         receipt_button = tk.Button(
-            add_window,
+            self.add_window,
             text='Choose file',
             command=self.launch_file_dialog,
         )
         receipt_button.grid(column=2, row=4)
 
-        add_button = tk.Button(add_window, text='Add', pady=10, padx=25)
+        add_button = tk.Button(
+            self.add_window,
+            text='Add',
+            pady=10,
+            padx=25,
+            command=self.insert_expense
+        )
         add_button.grid(row=5, columnspan=5, pady=5)
 
     def launch_file_dialog(self):
@@ -75,6 +90,20 @@ class Application(tk.Frame):
             filetypes=(("PDF files", "*.pdf"), ("all files", "*.*"))
         )
         self.receipt = os.path.basename(file_path)
+
+    def insert_expense(self):
+        insert_data_access = DataAccess()
+        insert_dict = {
+            'description': self.description.get(),
+            'amount': self.amount.get(),
+            'file_path': self.receipt,
+            'date': self.date.get(),
+        }
+        insert_data_access.insert(**insert_dict)
+        insert_data_access.close()
+        self.sum += float(self.amount.get())
+        self.sum_label.set(_format_sum_string(self.sum))
+        self.add_window.destroy()
 
 root = tk.Tk()
 app = Application(master=root)
