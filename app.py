@@ -4,20 +4,20 @@ from tkinter import filedialog
 
 from data_access import DataAccess
 
-def _get_sum():
+def get_sum():
     sum_data_access = DataAccess()
     sum_result = sum_data_access.sum_expenses()
     sum_data_access.close()
     return sum_result
 
-def _format_sum_string(sum_value):
+def format_sum_string(sum_value):
     return 'Total expenses: ${0:0.2f}'.format(sum_value)
 
 class Application(tk.Frame):
 
     def __init__(self, master=None):
         super().__init__(master, padx=75, pady=50)
-        self.sum = _get_sum()
+        self.sum = get_sum()
         self.add_window = None
         self.description = ''
         self.amount = 0.0
@@ -25,6 +25,16 @@ class Application(tk.Frame):
         self.receipt = 'dummy_path'
         self.pack()
         self.create_widgets()
+
+    def _is_float(self):
+        try:
+            float(self.amount.get())
+            return True
+        except ValueError:
+            return False
+
+    def _on_invalid_amount(self):
+        self.amount.set('Not a number!')
 
     def create_widgets(self):
         add_new_expense = tk.Button(
@@ -36,7 +46,7 @@ class Application(tk.Frame):
         add_new_expense.pack(side='top')
 
         self.sum_label = tk.StringVar()
-        self.sum_label.set(_format_sum_string(self.sum))
+        self.sum_label.set(format_sum_string(self.sum))
         expenses_label = tk.Label(self, textvariable=self.sum_label)
         expenses_label.pack()
 
@@ -56,7 +66,15 @@ class Application(tk.Frame):
         self.amount = tk.StringVar()
         amount_label = tk.Label(self.add_window, text='Amount: $')
         amount_label.grid(column=1, row=2)
-        amount_entry = tk.Entry(self.add_window, textvariable=self.amount)
+        validator = self.register(self._is_float)
+        invalid_amount_action = self.register(self._on_invalid_amount)
+        amount_entry = tk.Entry(
+            self.add_window,
+            textvariable=self.amount,
+            validate='focusout',
+            validatecommand=validator,
+            invalidcommand=invalid_amount_action
+        )
         amount_entry.grid(column=2, row=2)
 
         self.date = tk.StringVar()
@@ -102,7 +120,7 @@ class Application(tk.Frame):
         insert_data_access.insert(**insert_dict)
         insert_data_access.close()
         self.sum += float(self.amount.get())
-        self.sum_label.set(_format_sum_string(self.sum))
+        self.sum_label.set(format_sum_string(self.sum))
         self.add_window.destroy()
 
 root = tk.Tk()
