@@ -54,7 +54,6 @@ class Application(tk.Frame):
         self.add_window = tk.Toplevel(root, padx=35, pady=40)
         self.add_window.title('Add New Expense')
 
-        self.description = tk.StringVar()
         description_label = tk.Label(self.add_window, text='Description: ')
         description_label.grid(column=1, row=1)
         description_entry = tk.Entry(
