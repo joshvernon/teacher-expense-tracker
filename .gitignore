@@ -168,3 +168,4 @@ test.db
 sql/
 # VSCode stuff
 .vscode/
+local_app.py
