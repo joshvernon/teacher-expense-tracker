@@ -19,10 +19,10 @@ class Application(tk.Frame):
         super().__init__(master, padx=75, pady=50)
         self.sum = get_sum()
         self.add_window = None
-        self.description = ''
-        self.amount = 0.0
-        self.date = '1900-01-01 00:00:00'
-        self.receipt = 'dummy_path'
+        self.description = tk.StringVar()
+        self.amount = tk.StringVar()
+        self.date = tk.StringVar()
+        self.receipt = tk.StringVar()
         self.pack()
         self.create_widgets()
 
@@ -63,7 +63,6 @@ class Application(tk.Frame):
         )
         description_entry.grid(column=2, row=1)
 
-        self.amount = tk.StringVar()
         amount_label = tk.Label(self.add_window, text='Amount: $')
         amount_label.grid(column=1, row=2)
         validator = self.register(self._is_float)
@@ -77,18 +76,18 @@ class Application(tk.Frame):
         )
         amount_entry.grid(column=2, row=2)
 
-        self.date = tk.StringVar()
         date_label = tk.Label(self.add_window, text='Date: ')
         date_label.grid(column=1, row=3)
         date_entry = tk.Entry(self.add_window, textvariable=self.date)
         date_entry.grid(column=2, row=3)
 
+        self.receipt.set('Choose file')
         receipt_label = tk.Label(self.add_window, text='Receipt: ')
         receipt_label.grid(column=1, row=4)
         receipt_button = tk.Button(
             self.add_window,
-            text='Choose file',
             command=self.launch_file_dialog,
+            textvariable=self.receipt
         )
         receipt_button.grid(column=2, row=4)
 
@@ -107,14 +106,14 @@ class Application(tk.Frame):
             title="Select file",
             filetypes=(("PDF files", "*.pdf"), ("all files", "*.*"))
         )
-        self.receipt = os.path.basename(file_path)
+        self.receipt.set(os.path.basename(file_path))
 
     def insert_expense(self):
         insert_data_access = DataAccess()
         insert_dict = {
             'description': self.description.get(),
             'amount': self.amount.get(),
-            'file_path': self.receipt,
+            'file_path': self.receipt.get(),
             'date': self.date.get(),
         }
         insert_data_access.insert(**insert_dict)
