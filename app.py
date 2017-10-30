@@ -54,6 +54,7 @@ class Application(tk.Frame):
         self.add_window = tk.Toplevel(root, padx=35, pady=40)
         self.add_window.title('Add New Expense')
 
+        self.description.set('')
         description_label = tk.Label(self.add_window, text='Description: ')
         description_label.grid(column=1, row=1)
         description_entry = tk.Entry(
@@ -62,6 +63,7 @@ class Application(tk.Frame):
         )
         description_entry.grid(column=2, row=1)
 
+        self.amount.set('')
         amount_label = tk.Label(self.add_window, text='Amount: $')
         amount_label.grid(column=1, row=2)
         validator = self.register(self._is_float)
@@ -75,6 +77,7 @@ class Application(tk.Frame):
         )
         amount_entry.grid(column=2, row=2)
 
+        self.date.set('')
         date_label = tk.Label(self.add_window, text='Date: ')
         date_label.grid(column=1, row=3)
         date_entry = tk.Entry(self.add_window, textvariable=self.date)
