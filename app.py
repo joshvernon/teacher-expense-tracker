@@ -26,7 +26,7 @@ class Application(tk.Frame):
         self.pack()
         self.create_widgets()
 
-    def _is_float(self):
+    def _amount_is_float(self):
         try:
             float(self.amount.get())
             return True
@@ -66,7 +66,7 @@ class Application(tk.Frame):
         self.amount.set('')
         amount_label = tk.Label(self.add_window, text='Amount: $')
         amount_label.grid(column=1, row=2)
-        validator = self.register(self._is_float)
+        validator = self.register(self._amount_is_float)
         invalid_amount_action = self.register(self._on_invalid_amount)
         amount_entry = tk.Entry(
             self.add_window,
