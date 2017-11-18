@@ -2,7 +2,13 @@ import os.path
 import tkinter as tk
 from tkinter import filedialog
 
+import drive_sync
 from data_access import DataAccess
+
+# Set to True to enable uploading the expense database to Google Drive.
+# This feature is experimental and requires extra third-party libraries
+# and non-default security configuations.
+UPLOAD_TO_GOOGLE_DRIVE = False
 
 def get_sum():
     sum_data_access = DataAccess()
@@ -12,6 +18,12 @@ def get_sum():
 
 def format_sum_string(sum_value):
     return 'Total expenses: ${0:0.2f}'.format(sum_value)
+
+def close_window():
+    """On window close, upload the database to Google Drive."""
+    if UPLOAD_TO_GOOGLE_DRIVE:
+        drive_sync.upload()
+    root.destroy()
 
 class Application(tk.Frame):
 
@@ -127,4 +139,5 @@ class Application(tk.Frame):
 root = tk.Tk()
 app = Application(master=root)
 app.master.title('Teacher Expense Tracker')
+app.master.protocol('WM_DELETE_WINDOW', close_window)
 app.mainloop()
