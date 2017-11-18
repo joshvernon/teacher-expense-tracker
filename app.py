@@ -5,9 +5,9 @@ from tkinter import filedialog
 import drive_sync
 from data_access import DataAccess
 
-# Set to True to enable uploading the expense database to Google Drive.
-# This feature is experimental and requires extra third-party libraries
-# and non-default security configuations.
+# Set to True to enable uploading the expenses database to Google Drive.
+# This feature is experimental - it requires third-party libraries and
+# non-default security configuations.
 UPLOAD_TO_GOOGLE_DRIVE = False
 
 def get_sum():
