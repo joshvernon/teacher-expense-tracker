@@ -40,7 +40,7 @@ def get_credentials():
         credentials = tools.run_flow(flow, store, flags)
     return credentials
 
-def sync():
+def upload():
     # File content
     media_body = apiclient.http.MediaFileUpload(DATABASE, mimetype=MIMETYPE)
     # File metadata
@@ -64,4 +64,4 @@ def sync():
         print('Created file.')
 
 if __name__ == '__main__':
-    sync()
+    upload()
