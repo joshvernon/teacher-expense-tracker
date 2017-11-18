@@ -21,9 +21,9 @@ def format_sum_string(sum_value):
 
 def close_window():
     """On window close, upload the database to Google Drive."""
+    root.destroy()
     if UPLOAD_TO_GOOGLE_DRIVE:
         drive_sync.upload()
-    root.destroy()
 
 class Application(tk.Frame):
 
