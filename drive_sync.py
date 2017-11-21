@@ -7,7 +7,7 @@ from oauth2client import client, tools
 from oauth2client.file import Storage
 
 from data_access import DATABASE
-from secrets import CLIENT_SECRET, CREDENTIAL_DIR
+from secrets3 import CLIENT_SECRET, CREDENTIAL_DIR
 
 flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
 
