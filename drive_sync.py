@@ -19,6 +19,8 @@ DESCRIPTION = 'Database for Teacher Expense Tracker'
 
 class DriveClient():
 
+    """Lists, uploads, or downloads a file from Google Drive."""
+
     def __init__(self):
         self.drive = self._create_client()
         self.file_id = None
@@ -29,7 +31,7 @@ class DriveClient():
         http = credentials.authorize(httplib2.Http())
         drive = apiclient.discovery.build('drive', 'v3', http=http)
         return drive
-    
+
     def _get_credentials(self):
         """Gets valid user credentials from storage.
 
@@ -64,13 +66,13 @@ class DriveClient():
             return True
         else:
             return False
-    
+
     def download(self):
         """MODIFIED FROM THIS SAMPLE CODE: https://developers.google.com/drive/v3/web/manage-downloads"""
         if self.file_exists():
             request = self.drive.files().get_media(fileId=self.file_id)
-            fh = io.FileIO(DATABASE, 'w')
-            downloader = apiclient.http.MediaIoBaseDownload(fh, request)
+            file_handle = io.FileIO(DATABASE, 'w')
+            downloader = apiclient.http.MediaIoBaseDownload(file_handle, request)
             done = False
             while not done:
                 status, done = downloader.next_chunk()
