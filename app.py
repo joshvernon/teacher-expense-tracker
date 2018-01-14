@@ -2,13 +2,15 @@ import os.path
 import tkinter as tk
 from tkinter import filedialog
 
-import drive_sync
 from data_access import DataAccess
+from drive_sync import DriveClient
 
-# Set to True to enable uploading the expenses database to Google Drive.
+# Set to True to enable uploading or downloading the expenses
+# database to Google Drive.
 # This feature is experimental - it requires third-party libraries and
 # non-default security configuations.
 UPLOAD_TO_GOOGLE_DRIVE = False
+DOWNLOAD_FROM_GOOGLE_DRIVE = False
 
 def get_sum():
     sum_data_access = DataAccess()
@@ -19,16 +21,12 @@ def get_sum():
 def format_sum_string(sum_value):
     return 'Total expenses: ${0:0.2f}'.format(sum_value)
 
-def close_window():
-    """On window close, upload the database to Google Drive."""
-    root.destroy()
-    if UPLOAD_TO_GOOGLE_DRIVE:
-        drive_sync.upload()
-
 class Application(tk.Frame):
 
     def __init__(self, master=None):
         super().__init__(master, padx=75, pady=50)
+        self.drive_client = self._set_drive_client()
+        self.init_database()
         self.sum = get_sum()
         self.add_window = None
         self.description = tk.StringVar()
@@ -47,6 +45,23 @@ class Application(tk.Frame):
 
     def _on_invalid_amount(self):
         self.amount.set('Not a number!')
+
+    def _set_drive_client(self):
+        if UPLOAD_TO_GOOGLE_DRIVE or DOWNLOAD_FROM_GOOGLE_DRIVE:
+            drive_client = DriveClient()
+        else:
+            drive_client = None
+        return drive_client
+
+    def init_database(self):
+        if DOWNLOAD_FROM_GOOGLE_DRIVE:
+            self.drive_client.download()
+
+    def close_window(self):
+        """On window close, upload the database to Google Drive."""
+        root.destroy()
+        if UPLOAD_TO_GOOGLE_DRIVE:
+            self.drive_client.upload()
 
     def create_widgets(self):
         add_new_expense = tk.Button(
@@ -139,5 +154,5 @@ class Application(tk.Frame):
 root = tk.Tk()
 app = Application(master=root)
 app.master.title('Teacher Expense Tracker')
-app.master.protocol('WM_DELETE_WINDOW', close_window)
+app.master.protocol('WM_DELETE_WINDOW', app.close_window)
 app.mainloop()
