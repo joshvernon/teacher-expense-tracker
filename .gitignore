@@ -169,4 +169,4 @@ sql/
 # VSCode stuff
 .vscode/
 *_app.py
-.code-workspace
+*.code-workspace
