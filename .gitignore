@@ -164,9 +164,7 @@ ENV/
 
 ### Project-specific ignores ###
 *.db
-test.db
 sql/
-# VSCode stuff
 .vscode/
 *_app.py
 *.code-workspace
