@@ -9,7 +9,7 @@ fi
 
 # Make sure the provided file actually exists.
 if [ ! -f $DATABASE ]; then
-    echo "Database $DATABASE doesn't exist."
+    echo "File $DATABASE doesn't exist."
     exit 1
 fi
 
@@ -24,8 +24,8 @@ fi
 # relevant SQL command.
 sqlite3 -header -column $DATABASE <<ENDOFSQLITE
 .width 20 -12 11
-Select description, sum(amount) as total_amount, count(rowid) as total_count
-From expenses
-Group By description
-Order By total_amount desc;
+SELECT description, SUM(amount) AS total_amount, COUNT(rowid) AS total_count
+FROM expenses
+GROUP BY description
+ORDER BY total_amount DESC;
 ENDOFSQLITE
