@@ -28,4 +28,7 @@ SELECT description, SUM(amount) AS total_amount, COUNT(rowid) AS total_count
 FROM expenses
 GROUP BY description
 ORDER BY total_amount DESC;
+.headers off
+.width -34 11
+SELECT SUM(amount), COUNT(rowid) FROM expenses;
 ENDOFSQLITE
